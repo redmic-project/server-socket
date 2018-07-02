@@ -2,9 +2,8 @@ FROM redmic/redmic-server
 
 COPY /dist/*.jar ./
 
-EXPOSE 8089
+EXPOSE ${MICROSERVICE_PORT}
 
-ENTRYPOINT java $JAVA_OPTS \
+ENTRYPOINT java ${JAVA_OPTS} \
 	-Djava.security.egd=file:/dev/./urandom \
-	-Dlogging.level.org.springframework=${LOG_LEVEL} \
-	-jar ${DIRPATH}/socket.jar
+	-jar ${DIRPATH}/${MICROSERVICE_NAME}.jar
