@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +35,7 @@ import es.redmic.brokerlib.producer.Sender;
 import es.redmic.socket.test.integration.common.SocketIntegrationTestBase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@TestPropertySource(properties = { "schema.registry.port=18086" })
 public class VesselsTest extends SocketIntegrationTestBase {
 
 	protected Long userId = 13L;

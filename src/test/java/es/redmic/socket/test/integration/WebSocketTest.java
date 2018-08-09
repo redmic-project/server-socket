@@ -18,11 +18,13 @@ import org.junit.runner.RunWith;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import es.redmic.socket.test.integration.common.SocketIntegrationTestBase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@TestPropertySource(properties = { "schema.registry.port=18093" })
 public class WebSocketTest extends SocketIntegrationTestBase {
 
 	Long userId = 13L;

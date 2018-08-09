@@ -9,12 +9,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import es.redmic.socket.test.integration.common.TaskBaseTest;
 import es.redmic.socket.test.integration.ingest.common.dto.RunTaskIngestDataDocumentDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@TestPropertySource(properties = { "schema.registry.port=18092" })
 public class WormsToRedmicTest extends TaskBaseTest {
 
 	// @formatter:off
