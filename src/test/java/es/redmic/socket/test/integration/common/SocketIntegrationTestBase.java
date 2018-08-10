@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.ClassRule;
@@ -21,7 +23,6 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.WebSocketHttpHeaders;
@@ -41,7 +42,6 @@ import es.redmic.testutils.oauth.IntegrationTestBase;
 @SpringBootTest(classes = { SocketApplication.class,
 		SocketApplicationTest.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@DirtiesContext
 public abstract class SocketIntegrationTestBase extends IntegrationTestBase {
 
 	protected final static String JOB_PARAMETER_KEY = "parameters";
@@ -52,6 +52,12 @@ public abstract class SocketIntegrationTestBase extends IntegrationTestBase {
 	// configuración se pueda completar
 	@ClassRule
 	public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(1);
+
+	@PostConstruct
+	public void SocketIntegrationTestBasePostConstruct() throws Exception {
+
+		createSchemaRegistryRestApp(embeddedKafka.getZookeeperConnectionString(), embeddedKafka.getBrokersAsString());
+	}
 
 	@LocalServerPort
 	int port;
