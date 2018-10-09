@@ -12,7 +12,7 @@ services:
       labels:
         traefik.port: "${MICROSERVICE_PORT}"
         traefik.docker.network: traefik-net
-        traefik.frontend.rule: PathPrefix:/api/${MICROSERVICE_NAME}
+        traefik.frontend.rule: PathPrefix:/api/${MICROSERVICE_NAME};ReplacePathRegex:^/api/${MICROSERVICE_NAME}/(.*)$ /api/${MICROSERVICE_NAME}/msg/$1
         traefik.backend: ${MICROSERVICE_NAME}
       restart_policy:
         delay: 1m
