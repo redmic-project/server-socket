@@ -1,5 +1,7 @@
 package es.redmic.socket;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
@@ -20,6 +22,7 @@ public class SocketApplication {
 		SpringApplication.run(SocketApplication.class, args);
 	}
 
+	@PostConstruct
 	@Bean
 	MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
 		return registry -> registry.config().commonTags("application", microserviceName);
