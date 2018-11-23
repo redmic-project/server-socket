@@ -12,48 +12,36 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 
 @Configuration
-public class Oauth2SecurityConfiguration {
+@EnableResourceServer
+public class Oauth2SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-	@Configuration
-	@EnableResourceServer
-	protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+	private static final String SPARKLR_RESOURCE_ID = "sparklr";
 
-		private static final String SPARKLR_RESOURCE_ID = "sparklr";
+	@Value("${oauth.check_token.endpoint}")
+	String checkTokenEndpoint;
+	@Value("${oauth.client.id}")
+	String clientId;
+	@Value("${oauth.client.secret}")
+	String secret;
 
-		@Value("${oauth.check_token.endpoint}")
-		String checkTokenEndpoint;
-		@Value("${oauth.client.id}")
-		String clientId;
-		@Value("${oauth.client.secret}")
-		String secret;
+	@Primary
+	@Bean
+	public RemoteTokenServices tokenService() {
+		RemoteTokenServices tokenService = new RemoteTokenServices();
+		tokenService.setCheckTokenEndpointUrl(checkTokenEndpoint);
+		tokenService.setClientId(clientId);
+		tokenService.setClientSecret(secret);
+		return tokenService;
+	}
 
-		@Primary
-		@Bean
-		public RemoteTokenServices tokenService() {
-			RemoteTokenServices tokenService = new RemoteTokenServices();
-			tokenService.setCheckTokenEndpointUrl(checkTokenEndpoint);
-			tokenService.setClientId(clientId);
-			tokenService.setClientSecret(secret);
-			return tokenService;
-		}
+	@Override
+	public void configure(ResourceServerSecurityConfigurer resources) {
+		resources.tokenServices(tokenService()).resourceId(SPARKLR_RESOURCE_ID);
+	}
 
-		@Override
-		public void configure(ResourceServerSecurityConfigurer resources) {
-			resources.tokenServices(tokenService()).resourceId(SPARKLR_RESOURCE_ID);
-		}
+	@Override
+	public void configure(HttpSecurity http) throws Exception {
 
-		@Override
-		public void configure(HttpSecurity http) throws Exception {
-
-			http.anonymous().and().authorizeRequests().antMatchers(HttpMethod.GET, "/user/actuator/**").permitAll();
-
-			http.authorizeRequests().antMatchers("/**/ingest/**")
-					.access("#oauth2.hasScope('read') or #oauth2.hasScope('write') and"
-							+ " hasAnyRole('ROLE_ADMINISTRATOR', 'ROLE_OAG', 'ROLE_COLLABORATOR')");
-
-			http.authorizeRequests().antMatchers("/**/report/**")
-					.access("#oauth2.hasScope('read') or #oauth2.hasScope('write') and"
-							+ " hasAnyRole('ROLE_ADMINISTRATOR', 'ROLE_OAG', 'ROLE_COLLABORATOR', 'ROLE_USER')");
-		}
+		http.anonymous().and().authorizeRequests().antMatchers(HttpMethod.GET, "/user/actuator/**").permitAll();
 	}
 }
