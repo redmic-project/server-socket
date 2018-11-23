@@ -9,7 +9,6 @@ import es.redmic.socket.test.integration.common.BrokerListenerBaseTest;
 public class WormsToRedmicBrokerListenerTest extends BrokerListenerBaseTest {
 
 	public WormsToRedmicBrokerListenerTest() {
-		logger.info("Creando listeners de wormsToRedmic para emular task");
 	}
 
 	@Value("${broker.topic.task.worms.status}")
@@ -18,7 +17,7 @@ public class WormsToRedmicBrokerListenerTest extends BrokerListenerBaseTest {
 	@KafkaListener(topics = "${broker.topic.task.worms.run}")
 	public void run(MessageWrapper payload) {
 
-		logger.info("received payload='{}'", payload);
+		logger.debug("received payload='{}'", payload);
 		publishToBroker(WORMS_STATUS_TOPIC, payload);
 	}
 }
