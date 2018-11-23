@@ -1,1 +1,8 @@
 version: '3.5'
+
+services:
+  socket:
+    ports:
+      - target: ${MICROSERVICE_PORT}
+        published: ${MICROSERVICE_PORT}
+        mode: host
