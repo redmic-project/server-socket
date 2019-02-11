@@ -9,17 +9,33 @@ services:
       - SPRING_PROFILES_ACTIVE
       - OAUTH_CLIENT_ID
       - OAUTH_CLIENT_SECRET
-      - JAVA_OPTS=-XX:MaxRAMFraction=1
+      - JAVA_OPTS=-XX:MaxRAMFraction=2
     networks:
       - kafka-net
       - redmic-net
       - traefik-net
     healthcheck:
-      test: wget --spider -S -t 3 http://localhost:${MICROSERVICE_PORT}/api/${MICROSERVICE_NAME}/actuator/health
+      test: wget --spider -q http://localhost:${MICROSERVICE_PORT}/api/${MICROSERVICE_NAME}/actuator/health
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 2m
+      start_period: 3m
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        traefik.frontend.rule: Host:${PUBLIC_HOSTNAME};PathPrefix:/api/${MICROSERVICE_NAME};ReplacePathRegex:^(/api/${MICROSERVICE_NAME})/(info|[0-9]+/.*)$$ $$1/msg/$$2
+        traefik.backend: ${MICROSERVICE_NAME}
+        traefik.port: "${MICROSERVICE_PORT}"
+      restart_policy:
+        delay: 1m
+        window: 3m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          memory: 410M
 
 networks:
   kafka-net:

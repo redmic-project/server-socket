@@ -12,13 +12,12 @@ public class ActivityReportBrokerListenerTest extends ReportBaseBrokerListenerTe
 	protected String REPORT_STATUS_TOPIC;
 
 	public ActivityReportBrokerListenerTest() {
-		logger.info("Creando listeners de report activity para emular task");
 	}
 
 	@KafkaListener(topics = "${broker.topic.task.report.activity.run}")
 	public void run(MessageWrapper payload) {
 
-		logger.info("received payload='{}'", payload);
+		logger.debug("received payload='{}'", payload);
 		publishToBroker(REPORT_STATUS_TOPIC, payload);
 	}
 }

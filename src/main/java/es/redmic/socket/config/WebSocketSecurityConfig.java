@@ -1,7 +1,6 @@
 package es.redmic.socket.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 
@@ -11,10 +10,9 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
 	@Override
 	protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
 
-		messages.simpTypeMatchers(SimpMessageType.CONNECT, SimpMessageType.UNSUBSCRIBE, SimpMessageType.DISCONNECT)
-				.permitAll();
-
-		messages.anyMessage().authenticated();
+		messages.simpDestMatchers("/socket/**")
+				.hasAnyRole("ROLE_ADMINISTRATOR", "ROLE_OAG", "ROLE_COLLABORATOR", "ROLE_USER").anyMessage()
+				.authenticated();
 	}
 
 	@Override

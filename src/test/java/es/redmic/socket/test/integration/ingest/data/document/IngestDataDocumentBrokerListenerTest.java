@@ -8,20 +8,19 @@ import es.redmic.socket.test.integration.ingest.common.IngestBaseBrokerListenerT
 public class IngestDataDocumentBrokerListenerTest extends IngestBaseBrokerListenerTest {
 
 	public IngestDataDocumentBrokerListenerTest() {
-		logger.info("Creando listeners de document ingest para emular task");
 	}
 
 	@KafkaListener(topics = "${broker.topic.task.ingest.document.run}")
 	public void run(MessageWrapper payload) {
 
-		logger.info("received payload='{}'", payload);
+		logger.debug("received payload='{}'", payload);
 		publishToBroker(INGEST_STATUS_TOPIC, payload);
 	}
 
 	@KafkaListener(topics = "${broker.topic.task.ingest.document.resume}")
 	public void resume(MessageWrapper payload) {
 
-		logger.info("received payload='{}'", payload);
+		logger.debug("received payload='{}'", payload);
 		publishToBroker(INGEST_STATUS_TOPIC, payload);
 	}
 }
