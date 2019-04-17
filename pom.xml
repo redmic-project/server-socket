@@ -13,7 +13,7 @@
 	<groupId>es.redmic</groupId>
 	<artifactId>socket</artifactId>
 	<packaging>jar</packaging>
-	<version>0.7.0</version>
+	<version>0.7.0-feature-updateCI</version>
 	<name>socket</name>
 	<description>Websocket server</description>
 
@@ -147,6 +147,16 @@
 		</dependency>
 	</dependencies>
 	<repositories>
+		<repository>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>https://artifactory.redmic.net/artifactory/libs-release</url>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>https://artifactory.redmic.net/artifactory/libs-snapshot</url>
+		</repository>
 		<repository>
 			<id>confluent</id>
 			<name>Confluent</name>
