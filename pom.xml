@@ -3,27 +3,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.3.RELEASE</version>
+		<groupId>es.redmic</groupId>
+		<artifactId>server-parent</artifactId>
+		<version>0.2.0</version>
 		<relativePath />
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>es.redmic</groupId>
 	<artifactId>socket</artifactId>
 	<packaging>jar</packaging>
-	<version>0.7.0</version>
+	<version>0.8.0</version>
 	<name>socket</name>
 	<description>Websocket server</description>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<java.version>1.8</java.version>
-
 		<!-- REDMIC -->
 		<redmic.broker-lib.version>0.6.0</redmic.broker-lib.version>
 		<redmic.exceptions.version>0.6.0</redmic.exceptions.version>
@@ -33,9 +26,6 @@
 		<!-- OTHER -->
 		<spring-security-oauth2.version>2.3.0.RELEASE</spring-security-oauth2.version>
 		<kafka.version>1.1.0</kafka.version>
-
-		<!-- Plugins -->
-		<jacoco.version>0.8.1</jacoco.version>
 	</properties>
 
 	<dependencies>
@@ -97,17 +87,6 @@
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 
-		<!-- Logs -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-		</dependency>
-
 		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
@@ -148,6 +127,21 @@
 	</dependencies>
 	<repositories>
 		<repository>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>https://artifactory.redmic.net/artifactory/libs-release</url>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>https://artifactory.redmic.net/artifactory/libs-snapshot</url>
+		</repository>
+		<repository>
+			<id>osgeo</id>
+			<name>Open Source Geospatial Foundation Repository</name>
+			<url>http://download.osgeo.org/webdav/geotools/</url>
+		</repository>
+		<repository>
 			<id>confluent</id>
 			<name>Confluent</name>
 			<url>https://packages.confluent.io/maven/</url>
@@ -177,26 +171,6 @@
 				<configuration>
 					<reuseForks>false</reuseForks>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<executions>
-					<execution>
-						<id>pre-unit-test</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>post-unit-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
