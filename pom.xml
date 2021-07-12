@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>es.redmic</groupId>
 		<artifactId>server-parent</artifactId>
-		<version>0.3.0</version>
+		<version>0.2.0</version>
 		<relativePath />
 	</parent>
 
@@ -24,8 +24,8 @@
 		<redmic.test-utils.version>0.10.0-feature-refactoring</redmic.test-utils.version>
 
 		<!-- OTHER -->
-		<spring-security-oauth2.version>2.1.0.RELEASE</spring-security-oauth2.version>
-		<kafka.version>2.0.1</kafka.version>
+		<spring-security-oauth2.version>2.3.0.RELEASE</spring-security-oauth2.version>
+		<kafka.version>1.1.0</kafka.version>
 	</properties>
 
 	<dependencies>
