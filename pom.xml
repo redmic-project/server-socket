@@ -12,7 +12,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>socket</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.0</version>
+	<version>0.9.0</version>
 	<name>socket</name>
 	<description>Websocket server</description>
 
@@ -21,7 +21,7 @@
 		<redmic.broker-lib.version>0.11.0</redmic.broker-lib.version>
 		<redmic.exceptions.version>0.10.0</redmic.exceptions.version>
 		<redmic.utils.version>0.10.0-feature-changeJtsVersion</redmic.utils.version>
-		<redmic.test-utils.version>0.10.0-feature-refactoring</redmic.test-utils.version>
+		<redmic.test-utils.version>0.11.0</redmic.test-utils.version>
 
 		<!-- OTHER -->
 		<spring-security-oauth2.version>2.3.0.RELEASE</spring-security-oauth2.version>
