@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.9'
 
 services:
   socket:
@@ -31,9 +31,16 @@ services:
       mode: replicated
       replicas: ${REPLICAS:-1}
       labels:
-        traefik.frontend.rule: Host:${PUBLIC_HOSTNAME};PathPrefix:/api/${MICROSERVICE_NAME};ReplacePathRegex:^(/api/${MICROSERVICE_NAME})/(info|[0-9]+/.*)$$ $$1/msg/$$2
-        traefik.backend: ${MICROSERVICE_NAME}
-        traefik.port: "${MICROSERVICE_PORT}"
+        traefik.enable: 'true'
+
+        traefik.http.routers.redmic-socket.entrypoints: ${TRAEFIK_ENTRYPOINT}
+        traefik.http.routers.redmic-socket.rule: (Host(`${PUBLIC_HOSTNAME}`) || Host(`${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}`)) && PathPrefix(`/api/${MICROSERVICE_NAME}`)
+
+        traefik.http.middlewares.redmic-socket-replacepathregex.replacepathregex.regex: ^(/api/${MICROSERVICE_NAME})/(info|[0-9]+/.*)$$
+        traefik.http.middlewares.redmic-socket-replacepathregex.replacepathregex.replacement: $$1/msg/$$2
+        traefik.http.routers.redmic-socket.middlewares: redmic-socket-replacepathregex
+
+        traefik.http.services.redmic-socket.loadbalancer.server.port: ${MICROSERVICE_PORT}
       restart_policy:
         delay: ${RESTART_DELAY:-1m}
       update_config:
