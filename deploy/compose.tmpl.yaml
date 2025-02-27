@@ -1,22 +1,12 @@
-version: '3.9'
-
 services:
   socket:
     image: ${IMAGE_NAME:-registry.gitlab.com/redmic-project/server/socket}:${IMAGE_TAG:-latest}
-    build:
-      context: ..
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-      args:
-        PARENT_IMAGE_NAME:
-        PARENT_IMAGE_TAG:
-        MICROSERVICE_NAME:
-        MICROSERVICE_PORT:
     environment:
       MICROSERVICE_NAME:
       MICROSERVICE_PORT:
       OAUTH_CLIENT_ID:
       OAUTH_CLIENT_SECRET:
-      JAVA_OPTS: -XX:MaxRAMFraction=2
+      JAVA_OPTS:
     networks:
       kafka-net:
       redmic-net:
@@ -25,26 +15,23 @@ services:
       test: wget --spider -q http://localhost:${MICROSERVICE_PORT}/api/${MICROSERVICE_NAME}/actuator/health
       interval: ${HEALTHCHECK_INTERVAL:-30s}
       timeout: ${HEALTHCHECK_TIMEOUT:-10s}
-      retries: ${HEALTHCHECK_RETRIES:-3}
+      retries: ${HEALTHCHECK_RETRIES:-10}
       start_period: ${HEALTHCHECK_START_PERIOD:-3m}
     deploy:
       mode: replicated
       replicas: ${REPLICAS:-1}
+      restart_policy:
+        delay: ${RESTART_DELAY:-10s}
+      update_config:
+        delay: ${UPDATE_DELAY:-3m}
       labels:
-        traefik.enable: 'true'
-
+        traefik.enable: ${TRAEFIK_ENABLE:-true}
         traefik.http.routers.redmic-socket.entrypoints: ${TRAEFIK_ENTRYPOINT}
         traefik.http.routers.redmic-socket.rule: (Host(`${PUBLIC_HOSTNAME}`) || Host(`${TRAEFIK_SUBDOMAIN}.${PUBLIC_HOSTNAME}`)) && PathPrefix(`/api/${MICROSERVICE_NAME}`)
-
         traefik.http.middlewares.redmic-socket-replacepathregex.replacepathregex.regex: ^(/api/${MICROSERVICE_NAME})/(info|[0-9]+/.*)$$
         traefik.http.middlewares.redmic-socket-replacepathregex.replacepathregex.replacement: $$1/msg/$$2
         traefik.http.routers.redmic-socket.middlewares: redmic-socket-replacepathregex
-
         traefik.http.services.redmic-socket.loadbalancer.server.port: ${MICROSERVICE_PORT}
-      restart_policy:
-        delay: ${RESTART_DELAY:-1m}
-      update_config:
-        delay: ${UPDATE_DELAY:-2m}
       resources:
         limits:
           cpus: '${RESOURCES_LIMITS_CPUS:-0.5}'
